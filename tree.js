@@ -12,16 +12,27 @@ var Tree = function(bonds) {
 	this.endpoints = { start: "", end: "" };
 };
 Tree.prototype = {
+	formRules: function(points) {
+		var rules = [];		
+		[[1,1], [-1,1], [-1,-1], [1,-1]].forEach(function(multipliers) {
+			points.forEach(function(point) {			
+				rules.push([multipliers[0] * point[0], multipliers[1] * point[1]]);
+			});
+		});
+		var chain = {};
+		chain[rules[0]] = rules[1];
+		rules.reduce(function(prev, current) {
+			chain[prev] = current;
+			return current;
+		});
+		chain[rules.pop()] = rules[0];
+		return chain;
+	},
 	nextDirection: function(directions, preference) {
 		// After making a bond, decide in what direction the next bond...
 		// ... should be made.
-		directions = directions.slice().reverse();
-		var next = {
-			'1,0': [0, 1],
-			'0,1': [-1, 0],
-			'-1,0': [0, -1],
-			'0,-1': [1, 0]
-		};
+		directions = directions.slice().reverse();		
+		var next = this.formRules([[.9, .4], [.7, .7], [.4, .9]]);
 		
 		// Allow a preferred direction to be taken, useful in making organic...
 		// ... look as they are usually seen, i.e., in making C-C bonds...
@@ -36,13 +47,10 @@ Tree.prototype = {
 	},	
 	inverseDirection: function(direction) {
 		// After making a bond to another atom, decide in which direction...
-		// ... it should start in making its own bonds.
-		var inverse = {
-			'1,0': [-1, 0],
-			'0,1': [0, -1],
-			'-1,0': [1, 0],
-			'0,-1': [0, 1]
-		};
+		// ... it should start in making its own bonds.		
+		var invert = function(x){return -1*x;};
+		var inverse = JSON.parse(JSON.stringify(this.formRules([[.9, .4], [.7, .7], [.4, .9]])), function(a,b){return b.map ? a.split(',').map(invert) : b});
+		console.log(inverse);
 		return inverse[direction+""];
 	},
 	coordinateTaken: function(coordinates, coordinate) {
@@ -76,7 +84,7 @@ Tree.prototype = {
 				return;
 			}	
 						
-			directions[branch.from] = directions[branch.from] || [[0,-1]];	
+			directions[branch.from] = directions[branch.from] || [[.9, .4]];	
 			directions[branch.to] = directions[branch.to] || [];					
 			
 			// For bonds at a start point, try to go the opposite direction of the end point
@@ -138,7 +146,7 @@ Tree.prototype = {
 				xOffset = this.window.xOffset,
 				yOffset = this.window.yOffset;
 			var x1 = p1[0], x2 = p2[0], y1 = p1[1], y2 = p2[1];
-			ctx.lineWidth = size/15;
+			ctx.lineWidth = size/30;
 			if( x1 == x2 ) {
 				ctx.moveTo(size*(x1+xOffset)+shift*size/15, size*(y1+yOffset)); 
 				ctx.lineTo(size*(x2+xOffset)+shift*size/15, size*(y2+yOffset));
@@ -152,13 +160,13 @@ Tree.prototype = {
 			var size = this.window.size,
 				xOff = this.window.xOffset,
 				yOff = this.window.yOffset;
-			ctx.arc(size*(x+xOff),size*(y+yOff),size/3,0,Math.PI*2);
+			ctx.arc(size*(x+xOff),size*(y+yOff),size/6,0,Math.PI*2);
 			this.points.push({ type: "circle", points: [x,y] }); 
 		},
 		fillText: function(ctx, txt, x,y) {
 			var size = this.window.size;
-			ctx.font = "bold "+Math.floor(size/4)+"px Arial";
-			ctx.fillText(txt, this.window.size*(x+this.window.xOffset)-size/4,this.window.size*(y+this.window.yOffset)+size/8);
+			ctx.font = "bold "+Math.floor(size/5)+"px Arial";
+			ctx.fillText(txt, this.window.size*(x+this.window.xOffset)-size/8,this.window.size*(y+this.window.yOffset)+size/12);
 		}
 	},
 	window: function() {
