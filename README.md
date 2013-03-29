@@ -1,3 +1,5 @@
+![Graph Visualization](http://f.cl.ly/items/272c013f3n1m292f042N/graph.png)
+
 Introduction
 ============
 This library is a portion of the code used in [Bonds.io](http://bonds.io). Input a list of edges, between two points, with the number of edges to be included in this relation (i.e., bond count), and render them on a canvas element. Make sure to include the RGB color of a vertex in its name, e.g., `"A,#0f0"`.
