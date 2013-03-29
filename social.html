@@ -1,0 +1,51 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>Graph Renderer</title>
+		<script src="tree.js"></script>
+	</head>
+	<body>
+		<canvas id="cvs" width="600" height="600"></canvas>
+		<script>
+			var cvs = document.getElementById('cvs'),
+				ctx = cvs.getContext('2d');						
+			
+			var color = function(word) {
+				var rands = [Math.floor(Math.random()*205),
+							Math.floor(Math.random()*205),
+							Math.floor(Math.random()*205)];
+				return word+",#"+rands.map(function(rand) {
+					return (rand+50).toString(16)
+				}).join("");
+			};
+			
+			var Me = color("Me"),
+				A = color("A"),
+				B = color("B"),
+				C = color("C"),
+				D = color("D"),
+				E = color("E"),
+				F = color("F"),
+				G = color("G"),
+				H = color("H");				
+							
+			var tree = new Tree([
+				[Me, A, 1],
+				[Me, B, 1],
+				[Me, C, 1],
+				[Me, D, 1],
+				[Me, E, 1],
+				[Me, F, 1],
+				[Me, G, 1],
+				[Me, H, 1],
+				[A, B, 1],
+				[A, C, 1],
+				[A, D, 1],
+				[A, E, 1],
+				[B, E, 1],
+				[B, G, 1],
+			]);
+			tree.draw(ctx);
+		</script>
+	</body>
+</html>
