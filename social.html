@@ -19,32 +19,42 @@
 				}).join("");
 			};
 			
-			var Me = color("Me"),
-				A = color("A"),
-				B = color("B"),
-				C = color("C"),
-				D = color("D"),
-				E = color("E"),
-				F = color("F"),
-				G = color("G"),
-				H = color("H");				
-							
-			var tree = new Tree([
-				[Me, A, 1],
-				[Me, B, 1],
-				[Me, C, 1],
-				[Me, D, 1],
-				[Me, E, 1],
-				[Me, F, 1],
-				[Me, G, 1],
-				[Me, H, 1],
-				[A, B, 1],
-				[A, C, 1],
-				[A, D, 1],
-				[A, E, 1],
-				[B, E, 1],
-				[B, G, 1],
-			]);
+			var colors = {},				
+				codes = (function() {
+					var store = {};
+					var codes = "ABCDEFGHIJKLMNOPQRSTUV".split('');
+					return function(id) {
+						store[id] = store[id] ? store[id] : codes.shift();
+						return store[id];
+					};
+				}()),
+				uniq = {};
+			var bonds = [				
+				["219202","219237",1],
+				["219202","219237",1],
+				["214140","219237",1],
+				["219094","219203",1],
+				["219094","219203",1],
+				["214140","219203",1],
+				["219237","219202",1],
+				["219237","219202",1],
+				["219204","219202",1]
+			].filter(function(bond) {
+				if( uniq[bond] ) {
+					return false;
+				} else {
+					uniq[bond] = true;
+					uniq[[bond[1], bond[0], 1]] = true;
+					return true;
+				}				
+			}).map(function(bond) {
+				return [codes(bond[0]), codes(bond[1]), 1];
+			}).map(function(bond) {
+				colors[bond[0]] = colors[bond[0]] || color(bond[0]);
+				colors[bond[1]] = colors[bond[1]] || color(bond[1]);
+				return [colors[bond[0]], colors[bond[1]], 1];
+			});			
+			var tree = new Tree(bonds);
 			tree.draw(ctx);
 		</script>
 	</body>

@@ -2,7 +2,7 @@ var attr = function(attr) { return function(elm) {return elm[attr]; } };
 var flatEqual = function(a, b) { return JSON.stringify(a) == JSON.stringify(b); };
 
 var Tree = function(bonds) {
-	this.bonds = bonds.map(function(bond) {
+	this.bonds = (bonds.length ? bonds : bonds.bonds).map(function(bond) {
 		return bond.from ? bond : {
 			from: bond[0],
 			to: bond[1],
