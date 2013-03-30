@@ -146,7 +146,7 @@ Tree.prototype = {
 				xOffset = this.window.xOffset,
 				yOffset = this.window.yOffset;
 			var x1 = p1[0], x2 = p2[0], y1 = p1[1], y2 = p2[1];
-			ctx.lineWidth = size/30;
+			ctx.lineWidth = 1;
 			if( x1 == x2 ) {
 				ctx.moveTo(size*(x1+xOffset)+shift*size/15, size*(y1+yOffset)); 
 				ctx.lineTo(size*(x2+xOffset)+shift*size/15, size*(y2+yOffset));
@@ -160,13 +160,13 @@ Tree.prototype = {
 			var size = this.window.size,
 				xOff = this.window.xOffset,
 				yOff = this.window.yOffset;
-			ctx.arc(size*(x+xOff),size*(y+yOff),size/6,0,Math.PI*2);
+			ctx.arc(size*(x+xOff),size*(y+yOff),size/10,0,Math.PI*2);
 			this.points.push({ type: "circle", points: [x,y] }); 
 		},
 		fillText: function(ctx, txt, x,y) {
 			var size = this.window.size;
 			ctx.font = "bold "+Math.floor(size/5)+"px Arial";
-			ctx.fillText(txt, this.window.size*(x+this.window.xOffset)-size/8,this.window.size*(y+this.window.yOffset)+size/12);
+			ctx.fillText("", this.window.size*(x+this.window.xOffset)-size/8,this.window.size*(y+this.window.yOffset)+size/12);
 		}
 	},
 	window: function() {
