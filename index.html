@@ -1,43 +1,43 @@
 <!DOCTYPE>
 <html>
-	<head>
-		<title>Graph Renderer</title>
-		<script src="tree.js"></script>
-	</head>
-	<body>
-		<canvas id="cvs" width="600" height="600"></canvas>
-		<script>
-			var cvs = document.getElementById('cvs'),
-				ctx = cvs.getContext('2d');						
-			
-			var range = function(num) { return Array(num).join(0).split(0).map(function(_,i){return i;}) };
-			var identity = function(x) { return x; };
-			var completeGraph = function(n) {
-				var elms = range(n).map(function(name) {
-					var rands = [Math.floor(Math.random()*235),
-								Math.floor(Math.random()*235),
-								Math.floor(Math.random()*235)];
-					return name+",#"+rands.map(function(rand) {
-						return (rand+20).toString(16)
-					}).join("");
-				});
-				var pairs = [];
-				return elms.map(function(elmA) {						
-					return elms.map(function(elmB) {
-						if( elmB != elmA && pairs.indexOf(elmA+","+elmB) == -1  && pairs.indexOf(elmB+","+elmA) == -1 ) {
-							pairs.push(elmA+","+elmB);
-							return [elmA, elmB, 1];
-						}
-						else
-							return false;
-					}).filter(identity);
-				}).reduce(function(a, b) {
-					return a.concat(b);
-				});
-			};
-			
-			var tree = new Tree(completeGraph(7));
-			tree.draw(ctx);
-		</script>
-	</body>
+  <head>
+    <title>Graph Renderer</title>
+    <script src="tree.js"></script>
+  </head>
+  <body>
+    <canvas id="cvs" width="600" height="600"></canvas>
+    <script>
+      var cvs = document.getElementById('cvs'),
+          ctx = cvs.getContext('2d');            
+      
+      var range = function(num) { return Array(num).join(0).split(0).map(function(_,i){return i;}) };
+      var identity = function(x) { return x; };
+      var completeGraph = function(n) {
+        var elms = range(n).map(function(name) {
+          var rands = [Math.floor(Math.random()*235),
+                Math.floor(Math.random()*235),
+                Math.floor(Math.random()*235)];
+          return name+",#"+rands.map(function(rand) {
+            return (rand+20).toString(16)
+          }).join("");
+        });
+        var pairs = [];
+        return elms.map(function(elmA) {            
+          return elms.map(function(elmB) {
+            if( elmB != elmA && pairs.indexOf(elmA+","+elmB) == -1  && pairs.indexOf(elmB+","+elmA) == -1 ) {
+              pairs.push(elmA+","+elmB);
+              return [elmA, elmB, 1];
+            }
+            else
+              return false;
+          }).filter(identity);
+        }).reduce(function(a, b) {
+          return a.concat(b);
+        });
+      };
+      
+      var tree = new Tree(completeGraph(7));
+      tree.draw(ctx);
+    </script>
+  </body>
 </html>
